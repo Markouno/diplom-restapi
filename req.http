@@ -1,0 +1,37 @@
+
+
+### Регистрация пользователя
+POST http://127.0.0.1:8000/user/register
+Content-Type: application/json
+
+{
+    "name": "Marko",
+    "login": "markos",
+    "password": "tudasyuda",
+    "email": "markouno@mail.ru"
+    
+}
+
+
+### Регистрация поставщика
+POST http://127.0.0.1:8000/owner/register
+Content-Type: application/json
+
+{
+    "first_name": "Kostyanoy",
+    "last_name": "Evgeniy",
+    "login": "yogeny",
+    "password": "yogenycarxdrifter"
+    
+}
+
+### Создание магазинов
+POST http://127.0.0.1:8000/shop/register
+Content-Type: application/json
+
+{
+    "name": "Kitchen-Store",
+    "state": true,
+    "token": "2KgZNoAQjbzI0pxf"
+    
+}

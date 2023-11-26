@@ -7,6 +7,7 @@ class Owner(models.Model):
     last_name = models.CharField(max_length=100, verbose_name='Фамилия', null=False, blank=False)
     login = models.CharField(max_length=50, verbose_name='login', null=False, blank=False, unique=True)
     password = models.CharField(max_length=50, verbose_name='password', help_text='Пароль должен содерждать символы', null=False, blank=False, unique=False)
+    token = models.CharField(max_length=16, verbose_name='token', unique=True, blank=True)
 
     class Meta:
         verbose_name = 'Владелец'
@@ -14,7 +15,8 @@ class Owner(models.Model):
         ordering = ['-login']
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+        return f'{self.id}'
+        # return f'{self.first_name} {self.last_name}'
 
 
 class User(models.Model):
@@ -22,6 +24,7 @@ class User(models.Model):
     login = models.CharField(max_length=50, verbose_name='login', blank=False, null=False, unique=True)
     password = models.CharField(max_length=50, verbose_name='password', blank=False, null=False)
     email = models.EmailField(unique=True)
+    token = models.CharField(max_length=16, verbose_name='token', unique=True, blank=True)
 
     class Meta:
         verbose_name = 'Пользователь'
