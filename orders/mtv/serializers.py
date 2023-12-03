@@ -25,7 +25,10 @@ class UserSerializer(serializers.ModelSerializer):
 class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
-        fields = ('id', 'city', 'street', 'phone',)
+        fields = ('id', 'user', 'city', 'street', 'phone',)
+
+    def create(self, validated_data):
+        return Contact.objects.create(**validated_data)
 
 
 class ShopSerializer(serializers.ModelSerializer):

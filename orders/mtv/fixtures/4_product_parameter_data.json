@@ -1,0 +1,74 @@
+[
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 1,
+        "fields": {
+            "product_info_id": 1,
+            "parameter_id": 1,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 2,
+        "fields": {
+            "product_info_id": 2,
+            "parameter_id": 1,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 3,
+        "fields": {
+            "product_info_id": 3,
+            "parameter_id": 2,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 4,
+        "fields": {
+            "product_info_id": 4,
+            "parameter_id": 2,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 5,
+        "fields": {
+            "product_info_id": 5,
+            "parameter_id": 3,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 6,
+        "fields": {
+            "product_info_id": 6,
+            "parameter_id": 3,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 7,
+        "fields": {
+            "product_info_id": 7,
+            "parameter_id": 4,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 8,
+        "fields": {
+            "product_info_id": 8,
+            "parameter_id": 4,
+            "value": "Да"
+        }
+    }
+]

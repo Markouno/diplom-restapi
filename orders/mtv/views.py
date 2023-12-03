@@ -28,6 +28,27 @@ class RegisterUserAccount(APIView):
             return JsonResponse({'Status': False, 'Errors': 'AH'})
         
 
+class ContactUserAccount(APIView):
+    """
+    Для добавления контактов покупателей
+    """
+    
+    def post(self, request, *args, **kwargs):
+
+        try:
+            if User.objects.filter(token=request.data['token']).exists():
+                user_id = User.objects.get(token=request.data['token'])
+                request.data['user'] = user_id.id
+                del request.data['token']
+                serializer = ContactSerializer(data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return JsonResponse({'Status': 'Contact added', 'data': request.data})
+
+        except Exception as E:
+            return JsonResponse({'Status': False, 'Errors': 'AH'})
+        
+
 class RegisterOwnerAccount(APIView):
     """
     Для регистрации поставщиков
@@ -52,14 +73,17 @@ class ShopRegisterView(APIView):
 
     def post(self, request, *args, **kwargs):
 
-        # ow = Owner.objects.get(token=request.data['token'])
-        # print(ow)
-        if Owner.objects.filter(token=request.data['token']).exists():
-                owner_id = Owner.objects.filter(token=request.data['token'])
-                print(owner_id)
-                request.data['owner'] = owner_id
-                del request.data['token']
-                print(request.data)
+        try:
+            if Owner.objects.filter(token=request.data['token']).exists():
+                    owner_id = Owner.objects.get(token=request.data['token'])
+                    request.data['owner'] = owner_id.id
+                    del request.data['token']
+                    serializer = ShopSerializer(data=request.data)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return JsonResponse({'Status': 'Shop created', 'data': request.data})
+        except Exception as E:
+            return JsonResponse({'Status': False, 'Errors': 'AH'})
         # try:
         #     if Owner.objects.filter(token=request.data['token']).exists():
         #         owner_id = Owner.objects.filter(token=request.data['token']).select_related('id')

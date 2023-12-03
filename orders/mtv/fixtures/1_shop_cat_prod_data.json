@@ -1,0 +1,91 @@
+[
+    {
+        "model": "mtv.Shop",
+        "pk": 1,
+        "fields": {
+            "name": "Beauty-Shop",
+            "owner": 2,
+            "state": true
+        }
+    },
+    {
+        "model": "mtv.Shop",
+        "pk": 2,
+        "fields": {
+            "name": "Kitchen-Store",
+            "owner": 1,
+            "state": true
+        }
+    },
+    {
+        "model": "mtv.Category",
+        "pk": 1,
+        "fields": {
+            "name": "Skin-care"
+
+        }
+    },
+    {
+        "model": "mtv.Category",
+        "pk": 2,
+        "fields": {
+            "name": "Kitchen-dishes"
+
+        }
+    },
+    {
+        "model": "mtv.Category_Shops",
+        "pk": 1,
+        "fields": {
+            "category_id": 1,
+            "shop_id": 1
+
+        }
+    },
+    {
+        "model": "mtv.Category_Shops",
+        "pk": 2,
+        "fields": {
+            "category_id": 2,
+            "shop_id": 2
+
+        }
+    },
+    {
+        "model": "mtv.Product",
+        "pk": 1,
+        "fields": {
+            "name": "Frying pan",
+            "category_id": 2
+
+        }
+    },
+    {
+        "model": "mtv.Product",
+        "pk": 2,
+        "fields": {
+            "name": "Pot",
+            "category_id": 2
+
+        }
+    },
+    {
+        "model": "mtv.Product",
+        "pk": 3,
+        "fields": {
+            "name": "Clean-foam",
+            "category_id": 1
+
+        }
+    },
+    {
+        "model": "mtv.Product",
+        "pk": 4,
+        "fields": {
+            "name": "Lipstick",
+            "category_id": 1
+
+        }
+    }
+
+]

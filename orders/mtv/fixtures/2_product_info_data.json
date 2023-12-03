@@ -1,0 +1,90 @@
+[
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 1,
+        "fields": {
+            "shop_id": 1,
+            "product_id": 4,
+            "name": "Yves Rocher",
+            "quantity": 5,
+            "price": 259
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 2,
+        "fields": {
+            "shop_id": 1,
+            "product_id": 4,
+            "name": "VICHI",
+            "quantity": 10,
+            "price": 349
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 3,
+        "fields": {
+            "shop_id": 1,
+            "product_id": 3,
+            "name": "La Roche-Posay",
+            "quantity": 10,
+            "price": 2490
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 4,
+        "fields": {
+            "shop_id": 1,
+            "product_id": 3,
+            "name": "Garnier",
+            "quantity": 7,
+            "price": 590
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 5,
+        "fields": {
+            "shop_id": 2,
+            "product_id": 1,
+            "name": "Tefal",
+            "quantity": 5,
+            "price": 890
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 6,
+        "fields": {
+            "shop_id": 2,
+            "product_id": 1,
+            "name": "Swiss Diamond",
+            "quantity": 5,
+            "price": 1490
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 7,
+        "fields": {
+            "shop_id": 2,
+            "product_id": 2,
+            "name": "Gipfel",
+            "quantity": 10,
+            "price": 1290
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 8,
+        "fields": {
+            "shop_id": 2,
+            "product_id": 2,
+            "name": "Webber",
+            "quantity": 10,
+            "price": 1790
+        }
+    }
+]

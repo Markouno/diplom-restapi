@@ -1,0 +1,30 @@
+[
+    {
+        "model": "mtv.Parameter",
+        "pk": 1,
+        "fields": {
+            "name": "Для ухода в зимний период"
+        }
+    },
+    {
+        "model": "mtv.Parameter",
+        "pk": 2,
+        "fields": {
+            "name": "Глубокая очистка"
+        }
+    },
+    {
+        "model": "mtv.Parameter",
+        "pk": 3,
+        "fields": {
+            "name": "Антипригарное покрытие"
+        }
+    },
+    {
+        "model": "mtv.Parameter",
+        "pk": 4,
+        "fields": {
+            "name": "Нержавеющая сталь"
+        }
+    }
+]

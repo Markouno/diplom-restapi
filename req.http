@@ -5,23 +5,47 @@ POST http://127.0.0.1:8000/user/register
 Content-Type: application/json
 
 {
-    "name": "Marko",
-    "login": "markos",
-    "password": "tudasyuda",
-    "email": "markouno@mail.ru"
+    "name": "Nastyusha",
+    "login": "constellation",
+    "password": "tudasyuda123",
+    "email": "constellation.14@mail.ru"
+    
+}
+
+### Добавление контактов пользователя
+POST http://127.0.0.1:8000/user/contact
+Content-Type: application/json
+
+{
+    "token": "iDzomnlabQuW2YRv",
+    "city": "Moscow",
+    "street": "Beloborodova St., 4",
+    "phone": "89372391221"
     
 }
 
 
-### Регистрация поставщика
+### Регистрация поставщика # 1
 POST http://127.0.0.1:8000/owner/register
 Content-Type: application/json
 
 {
-    "first_name": "Kostyanoy",
-    "last_name": "Evgeniy",
-    "login": "yogeny",
-    "password": "yogenycarxdrifter"
+    "first_name": "Andrew",
+    "last_name": "Murchik",
+    "login": "mareek",
+    "password": "tudasyuda"
+    
+}
+
+### Регистрация поставщика # 2
+POST http://127.0.0.1:8000/owner/register
+Content-Type: application/json
+
+{
+    "first_name": "Murochka",
+    "last_name": "Pusheen",
+    "login": "murka",
+    "password": "royalcanin"
     
 }
 

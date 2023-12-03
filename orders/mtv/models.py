@@ -16,7 +16,7 @@ class Owner(models.Model):
 
     def __str__(self):
         return f'{self.id}'
-        # return f'{self.first_name} {self.last_name}'
+        return f'{self.first_name} {self.last_name}'
 
 
 class User(models.Model):
@@ -32,7 +32,7 @@ class User(models.Model):
         ordering = ['-name']
 
     def __str__(self):
-        return self.name
+        return self.id
 
 
 class Contact(models.Model):
