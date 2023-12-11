@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'rest_framework.authtoken',
+    'django_rest_passwordreset',
     'mtv',
 ]
 
@@ -118,11 +120,24 @@ USE_I18N = True
 
 USE_TZ = True
 
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_HOST_USER = 'merkizd@yandex.ru'
+EMAIL_HOST_PASSWORD = 'ymhtxthekncsxmzr'
+EMAIL_PORT = '465'
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'merkizd@yandex.ru'
+
+# SERVER_EMAIL = EMAIL_HOST_USER
+
 STATIC_URL = 'static/'
+
+
+AUTH_USER_MODEL = 'mtv.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -136,5 +151,9 @@ REST_FRAMEWORK = {
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
 
-    )
+    ),
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
 }

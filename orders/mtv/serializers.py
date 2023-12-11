@@ -1,25 +1,6 @@
 from rest_framework import serializers
-from mtv.models import Owner, User, Contact, Shop, Category, Product, ProductInfo, Order, OrderItem, Parameter, ProductInfoParameter
+from mtv.models import User, Contact, Shop, Category, Product, ProductInfo, Order, OrderItem, Parameter, ProductInfoParameter
 
-
-class OwnerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Owner
-        fields = ('id', 'first_name', 'last_name', 'login', 'password', 'token',)
-        read_only_fields = ('id',)
-
-    def create(self, validated_data):
-        return Owner.objects.create(**validated_data)
-
-
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('id', 'name', 'login', 'password', 'email', 'token',)
-        read_only_fields = ('id',)
-    
-    def create(self, validated_data):
-        return User.objects.create(**validated_data)
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -29,18 +10,31 @@ class ContactSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return Contact.objects.create(**validated_data)
+    
+
+class UserSerializer(serializers.ModelSerializer):
+    contacts = ContactSerializer(read_only=True, many=True)
+
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'email', 'type', 'contacts')
+        read_only_fields = ('id',)
+    
+    def create(self, validated_data):
+        return User.objects.create(**validated_data)
 
 
 class ShopSerializer(serializers.ModelSerializer):
     class Meta:
         model = Shop
-        fields = ('id', 'name', 'owner', 'state',)
+        fields = ('id', 'name', 'user', 'state',)
 
     def create(self, validated_data):
         return Shop.objects.create(**validated_data)
 
 
 class CategorySerializer(serializers.ModelSerializer):
+    shops = ShopSerializer(read_only=True, many=True)
     class Meta:
         model = Category
         fields = ('id', 'name', 'shops',)

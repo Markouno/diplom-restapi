@@ -1,61 +1,164 @@
+### ЗАПРОСЫ
 
 
 ### Регистрация пользователя
+### Указать "type": "shop" для создания магазина
+### Почту необходимо указывать реальную, иначе доступ к сервису будет недоступен
 POST http://127.0.0.1:8000/user/register
 Content-Type: application/json
 
 {
-    "name": "Nastyusha",
-    "login": "constellation",
-    "password": "tudasyuda123",
-    "email": "constellation.14@mail.ru"
+    "first_name": "Andrew",
+    "last_name" : "Zhuravlev",
+    "email": "merkizd@yandex.ru",
+    "password": "Markouno123",
+    "type": "shop"
+    
+}
+
+### Подтверждение почты
+### После регистрации на почту придёт ссылка с токеном, который нужно отправить в ответ
+POST http://127.0.0.1:8000/user/confirm
+Content-Type: application/json
+
+{
+    "email": "merkizd@yandex.ru",
+    "token": "a20b7c964ea84"
+    
+}
+
+### Логин пользователя
+### После логирования будут доступны остальные ссылки, путём получения Токена от БД
+POST http://127.0.0.1:8000/user/login
+Content-Type: application/json
+
+{
+    "email": "merkizd@yandex.ru",
+    "password": "Markouno123"
     
 }
 
 ### Добавление контактов пользователя
 POST http://127.0.0.1:8000/user/contact
 Content-Type: application/json
+Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
 
 {
-    "token": "iDzomnlabQuW2YRv",
     "city": "Moscow",
     "street": "Beloborodova St., 4",
-    "phone": "89372391221"
-    
+    "phone": "89372391221" 
 }
 
 
-### Регистрация поставщика # 1
-POST http://127.0.0.1:8000/owner/register
+
+
+
+### МАГАЗИНЫ
+
+
+### Список магазинов
+GET http://127.0.0.1:8000/shops
 Content-Type: application/json
 
-{
-    "first_name": "Andrew",
-    "last_name": "Murchik",
-    "login": "mareek",
-    "password": "tudasyuda"
-    
-}
 
-### Регистрация поставщика # 2
-POST http://127.0.0.1:8000/owner/register
+### Список Категорий
+GET http://127.0.0.1:8000/categories
 Content-Type: application/json
 
-{
-    "first_name": "Murochka",
-    "last_name": "Pusheen",
-    "login": "murka",
-    "password": "royalcanin"
-    
-}
-
-### Создание магазинов
-POST http://127.0.0.1:8000/shop/register
+### Список товаров
+### Можно указывать ID магазина либо ID категории для поиска товаров
+GET http://127.0.0.1:8000/products?shop_id=3
 Content-Type: application/json
 
+
+
+
+
+
+
+### КОРЗИНА
+
+
+### Создать заказ и заполнить корзину
+### 
+POST http://127.0.0.1:8000/basket
+Content-Type: application/json
+Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
+
+
 {
-    "name": "Kitchen-Store",
-    "state": true,
-    "token": "2KgZNoAQjbzI0pxf"
-    
+    "items":
+        {
+            "product_info": 10,
+            "quantity": 2
+        }
 }
+
+### Удаление позиции из заказа
+### 
+DELETE http://127.0.0.1:8000/basket
+Content-Type: application/json
+Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
+
+
+{
+    "items":
+        {
+            "id": 1
+        }
+}
+
+### Изменение позиции в заказе
+### 
+PUT http://127.0.0.1:8000/basket
+Content-Type: application/json
+Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
+
+
+{
+    "items":
+        {
+            "id": 5,
+            "quantity": 1
+        }
+}
+
+### Получить корзину
+### 
+GET http://127.0.0.1:8000/basket
+Content-Type: application/json
+Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
+
+
+
+
+
+
+
+### ДЛЯ ПОСТАВЩИКОВ
+
+
+### Получить статус магазина
+### 
+GET http://127.0.0.1:8000/partner/state
+Content-Type: application/json
+Authorization: token 231ad80cb00ac25482ad17c72b570b9c23c09ea7
+
+
+### Изменить статус магазина
+### 
+POST http://127.0.0.1:8000/partner/state
+Content-Type: application/json
+Authorization: token 231ad80cb00ac25482ad17c72b570b9c23c09ea7
+
+{
+    "state": true
+}
+
+
+
+### Посмотреть заказы для поставщиков
+### 
+GET http://127.0.0.1:8000/partner/orders
+Content-Type: application/json
+Authorization: token 231ad80cb00ac25482ad17c72b570b9c23c09ea7

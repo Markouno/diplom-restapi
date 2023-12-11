@@ -15,13 +15,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from mtv.views import RegisterUserAccount, RegisterOwnerAccount, ShopRegisterView, ContactUserAccount
+from django.urls import path, include
+from mtv.views import RegisterAccount, LoginAccount, ConfirmAccount, CategoryView, ShopView, ProductInfoView, BasketView, PartnerState, PartnerOrders, ContactView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/register', RegisterUserAccount.as_view(), name='user-register'),
-    path('user/contact', ContactUserAccount.as_view(), name='user-contact'),
-    path('owner/register', RegisterOwnerAccount.as_view(), name='owner-register'),
-    path('shop/register', ShopRegisterView.as_view(), name='shop-register'),
+    path('user/register', RegisterAccount.as_view(), name='user-register'),
+    path('user/login', LoginAccount.as_view(), name='user-login'),
+    path('user/confirm', ConfirmAccount.as_view(), name='user-confirm'),
+    path('user/contact', ContactView.as_view(), name='user-contact'),
+    path('categories', CategoryView.as_view(), name='categories'),
+    path('shops', ShopView.as_view(), name='shops'),
+    path('products', ProductInfoView.as_view(), name='shops'),
+    path('basket', BasketView.as_view(), name='basket'),
+    path('partner/state', PartnerState.as_view(), name='partner-state'),
+    path('partner/orders', PartnerOrders.as_view(), name='partner-orders'),
 ]

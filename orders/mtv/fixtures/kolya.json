@@ -1,0 +1,102 @@
+[
+    {
+        "model": "mtv.Shop",
+        "pk": 1,
+        "fields": {
+            "name": "Maykop-Shop",
+            "user": 1,
+            "state": true
+        }
+    },
+    {
+        "model": "mtv.Category",
+        "pk": 1,
+        "fields": {
+            "name": "Computers and Software"
+
+        }
+    },
+    {
+        "model": "mtv.Category_Shops",
+        "pk": 1,
+        "fields": {
+            "category_id": 1,
+            "shop_id": 1
+
+        }
+    },
+    {
+        "model": "mtv.Product",
+        "pk": 1,
+        "fields": {
+            "name": "Notebook",
+            "category_id": 1
+
+        }
+    },
+    {
+        "model": "mtv.Product",
+        "pk": 2,
+        "fields": {
+            "name": "PC",
+            "category_id": 1
+
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 1,
+        "fields": {
+            "shop_id": 1,
+            "product_id": 1,
+            "name": "Huawei Matebok 15",
+            "quantity": 5,
+            "price": 60990
+        }
+    },
+    {
+        "model": "mtv.ProductInfo",
+        "pk": 2,
+        "fields": {
+            "shop_id": 1,
+            "product_id": 2,
+            "name": "iMac Pro Retine",
+            "quantity": 10,
+            "price": 169900
+        }
+    },
+    {
+        "model": "mtv.Parameter",
+        "pk": 1,
+        "fields": {
+            "name": "Противоударный корпус"
+        }
+    },
+    {
+        "model": "mtv.Parameter",
+        "pk": 2,
+        "fields": {
+            "name": "Type-C 3.0"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 1,
+        "fields": {
+            "product_info_id": 1,
+            "parameter_id": 1,
+            "value": "Да"
+        }
+    },
+    {
+        "model": "mtv.ProductInfoParameter",
+        "pk": 2,
+        "fields": {
+            "product_info_id": 2,
+            "parameter_id": 2,
+            "value": "Да"
+        }
+    }
+
+
+]

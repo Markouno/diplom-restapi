@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "name": "Beauty-Shop",
-            "owner": 2,
+            "user": 2,
             "state": true
         }
     },
@@ -13,7 +13,7 @@
         "pk": 2,
         "fields": {
             "name": "Kitchen-Store",
-            "owner": 1,
+            "user": 1,
             "state": true
         }
     },
