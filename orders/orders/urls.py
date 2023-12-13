@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from mtv.views import RegisterAccount, LoginAccount, ConfirmAccount, CategoryView, ShopView, ProductInfoView, BasketView, PartnerState, PartnerOrders, ContactView
+from mtv.views import RegisterAccount, LoginAccount, ConfirmAccount, CategoryView, ShopView, ProductInfoView, BasketView, PartnerState, PartnerOrders, ContactView, OrderView, PartnerUpdate
 
 
 urlpatterns = [
@@ -29,6 +29,8 @@ urlpatterns = [
     path('shops', ShopView.as_view(), name='shops'),
     path('products', ProductInfoView.as_view(), name='shops'),
     path('basket', BasketView.as_view(), name='basket'),
+    path('order', OrderView.as_view(), name='order'),
     path('partner/state', PartnerState.as_view(), name='partner-state'),
     path('partner/orders', PartnerOrders.as_view(), name='partner-orders'),
+    path('partner/update', PartnerUpdate.as_view(), name='partner-update'),
 ]

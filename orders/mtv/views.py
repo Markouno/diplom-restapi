@@ -12,9 +12,7 @@ from django.db.models import Q, Sum, F
 from ujson import loads as load_json
 from mtv.models import User, ConfirmEmailToken, Contact, Shop, Category, Product, ProductInfo, Order, OrderItem, Parameter, ProductInfoParameter
 from mtv.serializers import UserSerializer, ContactSerializer, ShopSerializer, CategorySerializer, ProductSerializer, ProductInfoParameterSerializer, ProductInfoSerializer, OrderItemSerializer, OrderItemCreateSerializer, OrderSerializer
-import random
 # Create your views here.
-
 
 
 class RegisterAccount(APIView):
@@ -178,6 +176,7 @@ class BasketView(APIView):
             if serializer.is_valid():
                 try:
                     serializer.save()
+                    print(serializer.data)
                 except IntegrityError as error:
                     return JsonResponse({'Status': False, 'Errors': str(error)})
                 else:
@@ -261,6 +260,7 @@ class PartnerOrders(APIView):
     """
     Класс для получения заказов поставщиками
     """
+    # Получить заказы
     def get(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
@@ -276,6 +276,33 @@ class PartnerOrders(APIView):
 
         serializer = OrderSerializer(order, many=True)
         return Response(serializer.data)
+    
+
+class PartnerUpdate(APIView):
+    """
+    Класс для обновления прайса от поставщика
+    """
+    # Добавить новый продукт в магазин
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
+
+        if request.user.type != 'shop':
+            return JsonResponse({'Status': False, 'Error': 'Только для магазинов'}, status=403)
+
+        item = request.data.get('items')
+        try:
+
+            product_info = ProductInfo.objects.create(product_id=item['product_id'],
+                                                    name=item['name'],
+                                                    price=item['price'],
+                                                    quantity=item['quantity'],
+                                                    shop_id=item['shop_id'])
+
+            return JsonResponse({'Status': True})
+            
+        except:
+            return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
 
 class ContactView(APIView):
@@ -309,94 +336,42 @@ class ContactView(APIView):
 
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
-    # удалить контакт
-    def delete(self, request, *args, **kwargs):
+
+class OrderView(APIView):
+    """
+    Класс для получения и размешения заказов пользователями
+    """
+
+    # получить мои заказы
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
+        order = Order.objects.filter(
+            user_id=request.user.id).exclude(status='new').prefetch_related(
+            'ordered_items__product_info__product__category',
+            'ordered_items__product_info__product_parameters__parameter').select_related('contact').annotate(
+            total_sum=Sum(F('ordered_items__quantity') * F('ordered_items__product_info__price'))).distinct()
+
+        serializer = OrderSerializer(order, many=True)
+        return Response(serializer.data)
+
+    # разместить заказ из корзины
+    def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
-        items_sting = request.data.get('items')
-        if items_sting:
-            items_list = items_sting.split(',')
-            query = Q()
-            objects_deleted = False
-            for contact_id in items_list:
-                if contact_id.isdigit():
-                    query = query | Q(user_id=request.user.id, id=contact_id)
-                    objects_deleted = True
-
-            if objects_deleted:
-                deleted_count = Contact.objects.filter(query).delete()[0]
-                return JsonResponse({'Status': True, 'Удалено объектов': deleted_count})
-        return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
-
-    # редактировать контакт
-    def put(self, request, *args, **kwargs):
-        if not request.user.is_authenticated:
-            return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
-
-        if 'id' in request.data:
-            if request.data['id'].isdigit():
-                contact = Contact.objects.filter(id=request.data['id'], user_id=request.user.id).first()
-                print(contact)
-                if contact:
-                    serializer = ContactSerializer(contact, data=request.data, partial=True)
-                    if serializer.is_valid():
-                        serializer.save()
-                        return JsonResponse({'Status': True})
-                    else:
-                        return JsonResponse({'Status': False, 'Errors': serializer.errors})
+        if {'id', 'contact'}.issubset(request.data):
+            try:
+                is_updated = Order.objects.filter(
+                    user_id=request.user.id, id=request.data['id']).update(
+                    contact_id=request.data['contact'],
+                    status='in work')
+            except IntegrityError as error:
+                print(error)
+                return JsonResponse({'Status': False, 'Errors': 'Неправильно указаны аргументы'})
+            else:
+                if is_updated:
+                    new_order.send(sender=self.__class__, user_id=request.user.id)
+                    return JsonResponse({'Status': True})
 
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
-
-
-# class ContactUserAccount(APIView):
-#     """
-#     Для добавления контактов покупателей
-#     """
-    
-#     def post(self, request, *args, **kwargs):
-
-#         try:
-#             if User.objects.filter(token=request.data['token']).exists():
-#                 user_id = User.objects.get(token=request.data['token'])
-#                 request.data['user'] = user_id.id
-#                 del request.data['token']
-#                 serializer = ContactSerializer(data=request.data)
-#                 if serializer.is_valid():
-#                     serializer.save()
-#                     return JsonResponse({'Status': 'Contact added', 'data': request.data})
-
-#         except Exception as E:
-#             return JsonResponse({'Status': False, 'Errors': 'AH'})
-        
-
-# class ShopRegisterView(APIView):
-#     """
-#     Класс для работы с магазинами
-#     """
-
-#     def post(self, request, *args, **kwargs):
-
-#         try:
-#             if User.objects.filter(token=request.data['token']).exists():
-#                     owner_id = Owner.objects.get(token=request.data['token'])
-#                     request.data['owner'] = owner_id.id
-#                     del request.data['token']
-#                     serializer = ShopSerializer(data=request.data)
-#                     if serializer.is_valid():
-#                         serializer.save()
-#                         return JsonResponse({'Status': 'Shop created', 'data': request.data})
-#         except Exception as E:
-#             return JsonResponse({'Status': False, 'Errors': 'AH'})
-#         # try:
-#         #     if Owner.objects.filter(token=request.data['token']).exists():
-#         #         owner_id = Owner.objects.filter(token=request.data['token']).select_related('id')
-#         #         request.data['owner'] = owner_id
-#         #         del request.data['token']
-#         #         print(request.data)
-#         #         serializer = ShopSerializer(data=request.data)
-#         #         if serializer.is_valid():
-#         #             serializer.save()
-#         #             return JsonResponse({'Status': 'Shop created', 'data': request.data})
-#         # except Exception as E:
-#         #     return JsonResponse({'Status': False, 'Errors': 'AH'})

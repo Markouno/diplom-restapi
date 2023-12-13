@@ -8,11 +8,10 @@ POST http://127.0.0.1:8000/user/register
 Content-Type: application/json
 
 {
-    "first_name": "Andrew",
-    "last_name" : "Zhuravlev",
-    "email": "merkizd@yandex.ru",
-    "password": "Markouno123",
-    "type": "shop"
+    "first_name": "Paul",
+    "last_name" : "Wesson",
+    "email": "wesson@box.com",
+    "password": "password"
     
 }
 
@@ -22,8 +21,8 @@ POST http://127.0.0.1:8000/user/confirm
 Content-Type: application/json
 
 {
-    "email": "merkizd@yandex.ru",
-    "token": "a20b7c964ea84"
+    "email": "wesson@box.com",
+    "token": "886c39faf1253eb1b20576e2684828d889686"
     
 }
 
@@ -33,21 +32,28 @@ POST http://127.0.0.1:8000/user/login
 Content-Type: application/json
 
 {
-    "email": "merkizd@yandex.ru",
-    "password": "Markouno123"
+    "email": "wesson@box.com",
+    "password": "password"
     
 }
 
 ### Добавление контактов пользователя
 POST http://127.0.0.1:8000/user/contact
 Content-Type: application/json
-Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
+Authorization: token 38de7958cdd5fd9469c121499768eb98788b57e0
 
 {
     "city": "Moscow",
     "street": "Beloborodova St., 4",
-    "phone": "89372391221" 
+    "phone": "893723123123" 
 }
+
+### Просмотр контактов
+GET http://127.0.0.1:8000/user/contact
+Content-Type: application/json
+Authorization: token 38de7958cdd5fd9469c121499768eb98788b57e0
+
+
 
 
 
@@ -67,7 +73,7 @@ Content-Type: application/json
 
 ### Список товаров
 ### Можно указывать ID магазина либо ID категории для поиска товаров
-GET http://127.0.0.1:8000/products?shop_id=3
+GET http://127.0.0.1:8000/products?shop_id=1
 Content-Type: application/json
 
 
@@ -80,26 +86,22 @@ Content-Type: application/json
 
 
 ### Создать заказ и заполнить корзину
-### 
 POST http://127.0.0.1:8000/basket
 Content-Type: application/json
-Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
-
+Authorization: token 94e1880d42d8588f3745bf3e5fd374212aa8acb0
 
 {
     "items":
         {
-            "product_info": 10,
-            "quantity": 2
+            "product_info": 6,
+            "quantity": 1,
         }
 }
 
 ### Удаление позиции из заказа
-### 
 DELETE http://127.0.0.1:8000/basket
 Content-Type: application/json
-Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
-
+Authorization: token 94e1880d42d8588f3745bf3e5fd374212aa8acb0
 
 {
     "items":
@@ -109,11 +111,9 @@ Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
 }
 
 ### Изменение позиции в заказе
-### 
 PUT http://127.0.0.1:8000/basket
 Content-Type: application/json
-Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
-
+Authorization: token 94e1880d42d8588f3745bf3e5fd374212aa8acb0
 
 {
     "items":
@@ -124,10 +124,32 @@ Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
 }
 
 ### Получить корзину
-### 
 GET http://127.0.0.1:8000/basket
 Content-Type: application/json
-Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
+Authorization: token 94e1880d42d8588f3745bf3e5fd374212aa8acb0
+
+
+
+
+
+
+
+### ЗАКАЗЫ ПОКУПАТЕЛЕЙ
+
+### Посмотреть заказ
+GET http://127.0.0.1:8000/order
+Content-Type: application/json
+Authorization: token 94e1880d42d8588f3745bf3e5fd374212aa8acb0
+
+### Разместить заказ
+POST http://127.0.0.1:8000/order
+Content-Type: application/json
+Authorization: token 94e1880d42d8588f3745bf3e5fd374212aa8acb0
+
+{
+    "id": 1,
+    "contact": 1
+}
 
 
 
@@ -139,26 +161,37 @@ Authorization: token 363b36a21ce1866b15ac42a4a92764e2392b5880
 
 
 ### Получить статус магазина
-### 
 GET http://127.0.0.1:8000/partner/state
 Content-Type: application/json
-Authorization: token 231ad80cb00ac25482ad17c72b570b9c23c09ea7
-
+Authorization: token 04c5752b60b903bb2dc95ecf2ecf43c113489f0b
 
 ### Изменить статус магазина
-### 
 POST http://127.0.0.1:8000/partner/state
 Content-Type: application/json
-Authorization: token 231ad80cb00ac25482ad17c72b570b9c23c09ea7
+Authorization: token 04c5752b60b903bb2dc95ecf2ecf43c113489f0b
 
 {
     "state": true
 }
 
-
-
 ### Посмотреть заказы для поставщиков
-### 
 GET http://127.0.0.1:8000/partner/orders
 Content-Type: application/json
-Authorization: token 231ad80cb00ac25482ad17c72b570b9c23c09ea7
+Authorization: token 38de7958cdd5fd9469c121499768eb98788b57e0
+
+### Обновление прайса
+POST http://127.0.0.1:8000/partner/update
+Content-Type: application/json
+Authorization: token 38de7958cdd5fd9469c121499768eb98788b57e0
+
+{
+    "items":
+        {
+            "shop_id": 1,
+            "product_id": 4,
+            "name": "MAC",
+            "quantity": 4,
+            "price": 1290
+
+        }
+}

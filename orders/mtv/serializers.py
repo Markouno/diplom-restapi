@@ -7,9 +7,10 @@ class ContactSerializer(serializers.ModelSerializer):
     class Meta:
         model = Contact
         fields = ('id', 'user', 'city', 'street', 'phone',)
-
-    def create(self, validated_data):
-        return Contact.objects.create(**validated_data)
+        read_only_fields = ('id',)
+        extra_kwargs = {
+            'user': {'write_only': True}
+        }
     
 
 class UserSerializer(serializers.ModelSerializer):
