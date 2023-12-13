@@ -121,16 +121,15 @@ USE_I18N = True
 USE_TZ = True
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'merkizd@yandex.ru'
-EMAIL_HOST_PASSWORD = 'gwonfjcdeuehwxth'
+
+EMAIL_HOST = 'your.host.com'
+EMAIL_HOST_USER = 'your@mail.com'
+EMAIL_HOST_PASSWORD = 'token/password'
 EMAIL_PORT = '465'
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'merkizd@yandex.ru'
+DEFAULT_FROM_EMAIL = 'default@mail.com'
 
 # SERVER_EMAIL = EMAIL_HOST_USER
 
