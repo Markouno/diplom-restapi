@@ -14,23 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
+# from django.contrib import admin
+from baton.autodiscover import admin
 from django.urls import path, include
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from mtv.views import RegisterAccount, LoginAccount, ConfirmAccount, CategoryView, ShopView, ProductInfoView, BasketView, PartnerState, PartnerOrders, ContactView, OrderView, PartnerUpdate
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/register', RegisterAccount.as_view(), name='user-register'),
-    path('user/login', LoginAccount.as_view(), name='user-login'),
-    path('user/confirm', ConfirmAccount.as_view(), name='user-confirm'),
+    path('baton/', include('baton.urls')),
+    path('user/register', RegisterAccount.as_view(), name='register-account'),
+    path('user/login', LoginAccount.as_view(), name='login'),
+    path('user/confirm', ConfirmAccount.as_view(), name='confirm-account'),
     path('user/contact', ContactView.as_view(), name='user-contact'),
-    path('categories', CategoryView.as_view(), name='categories'),
-    path('shops', ShopView.as_view(), name='shops'),
-    path('products', ProductInfoView.as_view(), name='shops'),
-    path('basket', BasketView.as_view(), name='basket'),
-    path('order', OrderView.as_view(), name='order'),
+    path('categories/', CategoryView.as_view(), name='category-list'),
+    path('shops/', ShopView.as_view(), name='shop-list'),
+    path('products/', ProductInfoView.as_view(), name='product-info-view'),
+    path('basket/', BasketView.as_view(), name='basket'),
+    path('order/', OrderView.as_view(), name='order'),
     path('partner/state', PartnerState.as_view(), name='partner-state'),
     path('partner/orders', PartnerOrders.as_view(), name='partner-orders'),
     path('partner/update', PartnerUpdate.as_view(), name='partner-update'),
+    path('api/schema', SpectacularAPIView.as_view(), name='schema'),
+    path('api/schema/docs/', SpectacularSwaggerView.as_view(url_name='schema')),
 ]

@@ -50,6 +50,20 @@ ___
 ```
     docker-compose up
 ```
+
+Запуск Redis для работы с **Celery** из под **Docker**:
+
+```
+    docker run -d -p 6379:6379 redis
+```
+
+Запуск **Celery**:
+
+```
+    celery -A orders worker -l info
+```
+
+
 3. Необходимо внести данные для работы **Django**:
 
 В файле `orders/orders/settings.py` проверить переменные базы данных:

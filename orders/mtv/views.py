@@ -5,7 +5,8 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from mtv.signals import new_user_registered, new_order
+from drf_spectacular.utils import extend_schema
+from mtv.tasks import new_user_registered, new_order
 from django.http import JsonResponse
 from django.db import IntegrityError
 from django.db.models import Q, Sum, F
@@ -20,7 +21,13 @@ class RegisterAccount(APIView):
     Для регистрации покупателей
     """
     # Регистрация методом POST
+    @extend_schema(responses=UserSerializer)
     def post(self, request, *args, **kwargs):
+        """
+        Метод для отправки данных
+        Необходимо передать имя, фамилию, почту и пароль
+        В ответ Вы получите токен подтверждения на почту
+        """
 
         # проверяем обязательные аргументы
         print(request.data)
@@ -46,7 +53,7 @@ class RegisterAccount(APIView):
                     user = user_serializer.save()
                     user.set_password(request.data['password'])
                     user.save()
-                    new_user_registered.send(sender=self.__class__, user_id=user.id)
+                    new_user_registered.delay(user_id=user.id)
                     return JsonResponse({'Status': True})
                 else:
                     return JsonResponse({'Status': False, 'Errors': user_serializer.errors})
@@ -60,6 +67,10 @@ class LoginAccount(APIView):
     """
     # Авторизация методом POST
     def post(self, request, *args, **kwargs):
+        """
+        Для авторизации необходимо указать почту и пароль
+        В ответ Вы получите TOKEN
+        """
 
         if {'email', 'password'}.issubset(request.data):
             user = authenticate(request, username=request.data['email'], password=request.data['password'])
@@ -81,6 +92,10 @@ class ConfirmAccount(APIView):
     """
     # Регистрация методом POST
     def post(self, request, *args, **kwargs):
+        """
+        Метод отвечает за подтверждение регистрации пользователя
+        Принимает на вход почту и токен подтверждения
+        """
 
         # проверяем обязательные аргументы
         if {'email', 'token'}.issubset(request.data):
@@ -102,6 +117,7 @@ class CategoryView(ListAPIView):
     """
     Класс для просмотра категорий
     """
+    
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
@@ -118,7 +134,11 @@ class ProductInfoView(APIView):
     """
     Класс для поиска товаров
     """
+    @extend_schema(responses=ProductInfoSerializer)
     def get(self, request, *args, **kwargs):
+        """
+        Метод отвечает за получение продуктов в магазинах
+        """
 
         query = Q(shop__state=True)
         shop_id = request.query_params.get('shop_id')
@@ -147,7 +167,12 @@ class BasketView(APIView):
     """
 
     # получить корзину
+    @extend_schema(responses=OrderSerializer)
     def get(self, request, *args, **kwargs):
+        """
+        Метод отвечает за получение Вашей корзины
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
         basket = Order.objects.filter(
@@ -160,7 +185,12 @@ class BasketView(APIView):
         return Response(serializer.data)
 
     # редактировать корзину
+    @extend_schema(responses=OrderItemSerializer)
     def post(self, request, *args, **kwargs):
+        """
+        Метод отвечает за редактирование корзины и её наполнение
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -190,7 +220,12 @@ class BasketView(APIView):
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
     # удалить товары из корзины
+    @extend_schema(responses=OrderItemSerializer)
     def delete(self, request, *args, **kwargs):
+        """
+        Метод отвечает за удаление позиций из корзины
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -209,7 +244,12 @@ class BasketView(APIView):
         return JsonResponse({'Status': False, 'Errors': 'Не указаны все необходимые аргументы'})
 
     # добавить позиции в корзину
+    @extend_schema(responses=OrderItemSerializer)
     def put(self, request, *args, **kwargs):
+        """
+        Метод отвечает за добавление дополнительных позиций товаров
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -230,7 +270,12 @@ class PartnerState(APIView):
     """
 
     # получить текущий статус
+    @extend_schema(responses=ShopSerializer)
     def get(self, request, *args, **kwargs):
+        """
+        Метод отвечает за получение текущего статуса работы магазина
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -242,7 +287,12 @@ class PartnerState(APIView):
         return Response(serializer.data)
 
     # изменить текущий статус
+    @extend_schema(responses=ShopSerializer)
     def post(self, request, *args, **kwargs):
+        """
+        Метод отвечает за редактирование статуса работы магазина
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -261,7 +311,12 @@ class PartnerOrders(APIView):
     Класс для получения заказов поставщиками
     """
     # Получить заказы
+    @extend_schema(responses=OrderSerializer)
     def get(self, request, *args, **kwargs):
+        """
+        Метод отвечает за получение заказов для партнёров
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -283,7 +338,12 @@ class PartnerUpdate(APIView):
     Класс для обновления прайса от поставщика
     """
     # Добавить новый продукт в магазин
+    @extend_schema(responses=ProductInfoSerializer)
     def post(self, request, *args, **kwargs):
+        """
+        Метод отвечает за добавление новых продуктов и товаров в магазин
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -311,7 +371,12 @@ class ContactView(APIView):
     """
 
     # получить мои контакты
+    @extend_schema(responses=ContactSerializer)
     def get(self, request, *args, **kwargs):
+        """
+        Метод отвечает за получение контактов пользователя
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
         contact = Contact.objects.filter(
@@ -320,7 +385,12 @@ class ContactView(APIView):
         return Response(serializer.data)
 
     # добавить новый контакт
+    @extend_schema(responses=ContactSerializer)
     def post(self, request, *args, **kwargs):
+        """
+        Метод отвечает за редактирование контактов пользователя
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 
@@ -343,7 +413,12 @@ class OrderView(APIView):
     """
 
     # получить мои заказы
+    @extend_schema(responses=OrderSerializer)
     def get(self, request, *args, **kwargs):
+        """
+        Метод отвечает за получения заказов пользователя
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
         order = Order.objects.filter(
@@ -356,7 +431,12 @@ class OrderView(APIView):
         return Response(serializer.data)
 
     # разместить заказ из корзины
+    @extend_schema(responses=OrderSerializer)
     def post(self, request, *args, **kwargs):
+        """
+        Метод отвечает за размещение корзины в статус заказа
+        """
+
         if not request.user.is_authenticated:
             return JsonResponse({'Status': False, 'Error': 'Log in required'}, status=403)
 

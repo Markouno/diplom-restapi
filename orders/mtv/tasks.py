@@ -1,17 +1,12 @@
-from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-from django.dispatch import receiver, Signal
-from django_rest_passwordreset.signals import reset_password_token_created
-
 from mtv.models import ConfirmEmailToken, User
+from django.conf import settings
+from orders.celery import app
 
 
-new_user_registered = Signal()
 
-new_order = Signal()
-
-@receiver(new_user_registered)
-def new_user_registered_signal(user_id, **kwargs):
+@app.task
+def new_user_registered(user_id, **kwargs):
     """
     отправляем письмо с подтрердждением почты
     """
@@ -32,8 +27,8 @@ def new_user_registered_signal(user_id, **kwargs):
     )
     msg.send()
 
-@receiver(new_order)
-def new_order_signal(user_id, **kwargs):
+@app.task
+def new_order(user_id, **kwargs):
     """
     отправяем письмо при изменении статуса заказа
     """

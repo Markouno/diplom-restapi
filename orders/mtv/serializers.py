@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from mtv.models import User, Contact, Shop, Category, Product, ProductInfo, Order, OrderItem, Parameter, ProductInfoParameter
-
+from .models import User, Contact, Shop, Category, Product, ProductInfo, Order, OrderItem, Parameter, \
+    ProductInfoParameter
 
 
 class ContactSerializer(serializers.ModelSerializer):
@@ -11,7 +11,7 @@ class ContactSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'user': {'write_only': True}
         }
-    
+
 
 class UserSerializer(serializers.ModelSerializer):
     contacts = ContactSerializer(read_only=True, many=True)
@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'first_name', 'last_name', 'email', 'type', 'contacts')
         read_only_fields = ('id',)
-    
+
     def create(self, validated_data):
         return User.objects.create(**validated_data)
 
@@ -36,6 +36,7 @@ class ShopSerializer(serializers.ModelSerializer):
 
 class CategorySerializer(serializers.ModelSerializer):
     shops = ShopSerializer(read_only=True, many=True)
+
     class Meta:
         model = Category
         fields = ('id', 'name', 'shops',)

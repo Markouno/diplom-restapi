@@ -1,0 +1,681 @@
+openapi: 3.0.3
+info:
+  title: 'REST API DOC'
+  version: 0.0.0
+paths:
+  /api/schema:
+    get:
+      operationId: api_schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - api
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /basket:
+    get:
+      operationId: basket_retrieve
+      description: Метод отвечает за получение Вашей корзины
+      tags:
+      - basket
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    post:
+      operationId: basket_create
+      description: Метод отвечает за редактирование корзины и её наполнение
+      tags:
+      - basket
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    put:
+      operationId: basket_update
+      description: Метод отвечает за добавление дополнительных позиций товаров
+      tags:
+      - basket
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderItem'
+          description: ''
+    delete:
+      operationId: basket_destroy
+      description: Метод отвечает за удаление позиций из корзины
+      tags:
+      - basket
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '204':
+          description: No response body
+  /categories:
+    get:
+      operationId: categories_list
+      description: Класс для просмотра категорий
+      tags:
+      - categories
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+          description: ''
+  /order:
+    get:
+      operationId: order_retrieve
+      description: Метод отвечает за получения заказов пользователя
+      tags:
+      - order
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+    post:
+      operationId: order_create
+      description: Метод отвечает за размещение корзины в статус заказа
+      tags:
+      - order
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /partner/orders:
+    get:
+      operationId: partner_orders_retrieve
+      description: Метод отвечает за получение заказов для партнёров
+      tags:
+      - partner
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+  /partner/state:
+    get:
+      operationId: partner_state_retrieve
+      description: Метод отвечает за получение текущего статуса работы магазина
+      tags:
+      - partner
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+          description: ''
+    post:
+      operationId: partner_state_create
+      description: Метод отвечает за редактирование статуса работы магазина
+      tags:
+      - partner
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+          description: ''
+  /partner/update:
+    post:
+      operationId: partner_update_create
+      description: Метод отвечает за добавление новых продуктов и товаров в магазин
+      tags:
+      - partner
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInfo'
+          description: ''
+  /products:
+    get:
+      operationId: products_retrieve
+      description: Метод отвечает за получение продуктов в магазинах
+      tags:
+      - products
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductInfo'
+          description: ''
+  /shops:
+    get:
+      operationId: shops_list
+      description: Класс для просмотра списка магазинов
+      tags:
+      - shops
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Shop'
+          description: ''
+  /user/confirm:
+    post:
+      operationId: user_confirm_create
+      description: |-
+        Метод отвечает за подтверждение регистрации пользователя
+        Принимает на вход почту и токен подтверждения
+      tags:
+      - user
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /user/contact:
+    get:
+      operationId: user_contact_retrieve
+      description: Метод отвечает за получение контактов пользователя
+      tags:
+      - user
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+    post:
+      operationId: user_contact_create
+      description: Метод отвечает за редактирование контактов пользователя
+      tags:
+      - user
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Contact'
+          description: ''
+  /user/login:
+    post:
+      operationId: user_login_create
+      description: |-
+        Для авторизации необходимо указать почту и пароль
+        В ответ Вы получите TOKEN
+      tags:
+      - user
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /user/register:
+    post:
+      operationId: user_register_create
+      description: |-
+        Метод для отправки данных
+        Необходимо передать имя, фамилию, почту и пароль
+        В ответ Вы получите токен подтверждения на почту
+      tags:
+      - user
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+components:
+  schemas:
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название
+          maxLength: 40
+        shops:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shop'
+          readOnly: true
+      required:
+      - id
+      - name
+      - shops
+    Contact:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        user:
+          type: integer
+          writeOnly: true
+          title: Пользователь
+        city:
+          type: string
+          nullable: true
+          maxLength: 100
+        street:
+          type: string
+          nullable: true
+          maxLength: 100
+        phone:
+          type: string
+          nullable: true
+          maxLength: 20
+      required:
+      - id
+      - user
+    Order:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        ordered_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemCreate'
+          readOnly: true
+        status:
+          type: string
+          nullable: true
+          maxLength: 15
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        total_sum:
+          type: integer
+        contact:
+          allOf:
+          - $ref: '#/components/schemas/Contact'
+          readOnly: true
+      required:
+      - contact
+      - date
+      - id
+      - ordered_items
+      - total_sum
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          title: Заказ
+        product_info:
+          type: integer
+          title: Инфо о продукте
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Кол-во
+      required:
+      - id
+      - order
+      - product_info
+      - quantity
+    OrderItemCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        order:
+          type: integer
+          title: Заказ
+        product_info:
+          allOf:
+          - $ref: '#/components/schemas/ProductInfo'
+          readOnly: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          title: Кол-во
+      required:
+      - id
+      - order
+      - product_info
+      - quantity
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          maxLength: 50
+        category:
+          type: string
+          readOnly: true
+      required:
+      - category
+    ProductInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        shop:
+          type: integer
+          title: Магазин
+        product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          readOnly: true
+        name:
+          type: string
+          nullable: true
+          title: Название
+          maxLength: 50
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          title: Кол-во
+        price:
+          type: integer
+          maximum: 2147483647
+          minimum: 0
+          nullable: true
+          title: Цена
+        product_parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductInfoParameter'
+          readOnly: true
+      required:
+      - id
+      - product
+      - product_parameters
+      - shop
+    ProductInfoParameter:
+      type: object
+      properties:
+        parameter:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          title: Описание
+          maxLength: 50
+      required:
+      - parameter
+      - value
+    Shop:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          title: Название
+          maxLength: 50
+        user:
+          type: integer
+          title: Владелец
+        state:
+          type: boolean
+          title: Cтатус получения заказов
+      required:
+      - id
+      - name
+      - user
+    TypeEnum:
+      enum:
+      - shop
+      - buyer
+      type: string
+      description: |-
+        * `shop` - Магазин
+        * `buyer` - Покупатель
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        first_name:
+          type: string
+          maxLength: 150
+        last_name:
+          type: string
+          maxLength: 150
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          title: Тип пользователя
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/Contact'
+          readOnly: true
+      required:
+      - contacts
+      - email
+      - id
+  securitySchemes:
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
